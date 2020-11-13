@@ -135,13 +135,18 @@ class _ExamState extends State<Exam> {
                           builder: (_) {
                             return AlertDialog(
                               title: Text("Sorry"),
-                              content: Text("Wrong answer !!😥"),
+                              content: Text("Never give up, try Again?"),
                               actions: [
                                 customeFlatButton(
-                                    label: "close",
+                                    label: "no",
                                     myFun: () {
-                                      print("hi");
                                       Navigator.of(context).pop();
+                                    }),
+                                customeFlatButton(
+                                    label: "yes",
+                                    myFun: () {
+                                      Navigator.of(context)
+                                          .pushNamed('home_screen');
                                     }),
                               ],
                             );

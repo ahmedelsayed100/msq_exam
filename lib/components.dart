@@ -31,10 +31,12 @@ Widget continueButton(
 Widget customeFlatButton({String label, Function myFun, Color color}) {
   return FlatButton(
     onPressed: myFun,
+    padding: EdgeInsets.all(20),
     color: color,
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     child: Text(
       "$label",
+      style: TextStyle(fontSize: 18, color: Colors.white),
     ),
   );
 }

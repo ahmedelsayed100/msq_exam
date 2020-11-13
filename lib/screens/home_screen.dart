@@ -52,9 +52,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   filled: true,
                 ),
                 controller: _nameController,
+                // ignore: missing_return
                 validator: (value) {
-                  if (value.trim().isEmpty) return "please enter your name";
-                  return "";
+                  if (value.isEmpty) {
+                    return "please enter your name";
+                  }
                 },
               ),
               SizedBox(

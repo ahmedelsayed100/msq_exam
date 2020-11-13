@@ -14,8 +14,6 @@ class Exam extends StatefulWidget {
 class _ExamState extends State<Exam> {
   final randomAnswer = Random().nextInt(4);
   var random = Random();
-
-//  if (n2 >= n1) n2 += 1;
   var _random = Random().nextInt(4);
   Color _color = Colors.blue;
   List<dynamic> userAnswers = [];
@@ -32,8 +30,9 @@ class _ExamState extends State<Exam> {
         centerTitle: true,
       ),
       body: Container(
+        padding: EdgeInsets.only(top: screenHeigth * 0.08),
         child: ListView(
-          padding: EdgeInsets.all(20),
+          padding: EdgeInsets.all(screenHeigth * 0.04),
           children: [
             questions(
                 context: context,
@@ -64,42 +63,94 @@ class _ExamState extends State<Exam> {
                         print(userAnswers);
                         if (Data.answer[_random].isNotEmpty) {
                           if (Data.answer[_random][position] ==
-                              Data.correctAnswers[_random]) {}
+                              Data.correctAnswers[_random]) {
+                            userAnswers.add(Data.correctAnswers[_random]);
+                          }
                         }
                       });
                 },
                 itemCount: 4,
               ),
             ),
-            customeFlatButton(
-                label: (userAnswers.length <= 5) ? "next" : "show result",
-                color: Colors.amberAccent,
-                myFun: () {
-                  var n1 = random.nextInt(4);
-                  var n2 = random.nextInt(4);
-                  List test = [1, 2, 3, 4, 5];
-                  List randoms = [];
-                  // randoms.add(_random);
+            Padding(
+              padding: EdgeInsets.only(
+                left: screenWidth * 0.1,
+                right: screenWidth * 0.1,
+              ),
+              child: customeFlatButton(
+                  label: (userAnswers.length <= 5) ? "next" : "show result",
+                  color: Colors.green,
+                  myFun: () {
+                    var n2 = random.nextInt(4);
 
-                  if (userAnswers.length <= 5) {
-                    _random = randomAnswer;
-                    // if (!randoms.contains(_random)) {
-                    // for (int x = 0; x < 5; x++) {
-                    if (!randoms.contains(_random)) {
-                      randoms.add(_random);
+                    List randoms = [];
 
-                      setState(() {
-                        _random = n2;
-                      });
-                    } else {
-                      if (n2 >= _random) {
+                    if (userAnswers.length <= 5) {
+                      _random = randomAnswer;
+                      if (!randoms.contains(_random)) {
+                        randoms.add(_random);
+                        setState(() {
+                          _random = n2;
+                        });
+                      } else {
                         setState(() {
                           _random = n2 + 1;
                         });
                       }
+                    } else {
+                      double result;
+                      for (int x = 0; x < userAnswers.length; x++) {
+                        if (userAnswers.contains(Data.correctAnswers[x])) {
+                          setState(() {
+                            result = result + 1.0;
+                          });
+                        }
+                      }
+                      print("the result is :${result / 5}");
+                      if (result > 2) {
+                        showDialog(
+                            context: context,
+                            builder: (_) {
+                              return AlertDialog(
+                                title: Text("Congratiolations"),
+                                content: Text("goog job try again?"),
+                                actions: [
+                                  customeFlatButton(
+                                      label: "no",
+                                      myFun: () {
+                                        Navigator.of(context).pop();
+                                      }),
+                                  customeFlatButton(
+                                      label: "yes",
+                                      myFun: () {
+                                        Navigator.of(context)
+                                            .pushNamed('home_screen');
+                                      }),
+                                ],
+                              );
+                            });
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (_) {
+                            return AlertDialog(
+                              title: Text("Sorry"),
+                              content: Text("Wrong answer !!😥"),
+                              actions: [
+                                customeFlatButton(
+                                    label: "close",
+                                    myFun: () {
+                                      print("hi");
+                                      Navigator.of(context).pop();
+                                    }),
+                              ],
+                            );
+                          },
+                        );
+                      }
                     }
-                  }
-                }),
+                  }),
+            ),
           ],
         ),
       ),
@@ -114,6 +165,7 @@ Widget questions(
     var random}) {
   return StatefulBuilder(builder: (context, StateSetter setState) {
     return Container(
+      alignment: Alignment.center,
       width: screenWidth * 0.1,
       height: screenHeigth * 0.1,
       decoration: BoxDecoration(
@@ -127,69 +179,3 @@ Widget questions(
     );
   });
 }
-
-// Center(
-//       child: StatefulBuilder(builder: (context, StateSetter setState) {
-//         return Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: <Widget>[
-//             Text("counter  : ${p.counter}"),
-//             IconButton(
-//               icon: Icon(Icons.add),
-//               onPressed: () {
-//                 setState(() {
-//                   p.counter++;
-//                 });
-//               },
-//             ),
-//           ],
-//         );
-//       }),
-//     ),
-//   );
-// }
-
-// showDialog(
-//     context: context,
-//     builder: (_) {
-//       return AlertDialog(
-//         title: Text("Congratiolations"),
-//         content: Text("correct answer !!🤩"),
-//         actions: [
-//           customeFlatButton(
-//               label: "Continue",
-//               myFun: () {
-//                 print("hi");
-//                 // if(){}
-//                 setState(() {
-//                   setState(() {
-//                     _color = Colors.amberAccent;
-//                   });
-
-//                   question =
-//                       Data.quetions[_random + 1];
-//                   Navigator.of(context).pop();
-//                 });
-//               }),
-//         ],
-//       );
-//     });
-//     } else {
-//       showDialog(
-//         context: context,
-//         builder: (_) {
-//           return AlertDialog(
-//             title: Text("Sorry"),
-//             content: Text("Wrong answer !!😥"),
-//             actions: [
-//               customeFlatButton(
-//                   label: "close",
-//                   myFun: () {
-//                     print("hi");
-//                     Navigator.of(context).pop();
-//                   }),
-//             ],
-//           );
-//         },
-//       );
-//     }
